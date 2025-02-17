@@ -1,18 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guess the One Piece Character</title>
-    <link rel="stylesheet" href="opgame.css">
-</head>
-<body>
-    <h1>Guess the One Piece Character</h1>
-    <p>Type a character's name and see if you guessed correctly!</p>
-    <input type="text" id="guessInput" placeholder="Enter a name...">
-    <button onclick="checkGuess()">Guess</button>
-    <p id="result"></p>
+    <title>One Piece Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
 
-    <script src="opgame.js"></script>
+        h1 {
+            color: #333;
+        }
+
+        .game-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #result {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>One Piece Guessing Game</h1>
+        <p>Can you guess the character?</p>
+        <input type="text" id="guessInput" placeholder="Type your guess..." onkeydown="if(event.key === 'Enter') checkGuess()">
+        <button onclick="checkGuess()">Guess</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const characters = ["Luffy", "Zoro", "Sanji", "Chopper", "Usopp", "Nami", "Robin"];
+        let randomCharacter = getRandomCharacter();
+
+        function getRandomCharacter() {
+            return characters[Math.floor(Math.random() * characters.length)];
+        }
+
+        function checkGuess() {
+            let guessInput = document.getElementById("guessInput");
+            let guess = guessInput.value.trim();
+            let resultText = document.getElementById("result");
+
+            if (!guess) {
+                resultText.innerHTML = "⚠️ Please enter a name!";
+                resultText.style.color = "orange";
+                return;
+            }
+
+            if (guess.toLowerCase() === randomCharacter.toLowerCase()) {
+                resultText.innerHTML = `🎉 You got it! The character was <strong>${randomCharacter}</strong>`;
+                resultText.style.color = "green";
+                
+                // Wait 2 seconds, then restart the game
+                setTimeout(() => {
+                    randomCharacter = getRandomCharacter(); // Pick a new character
+                    guessInput.value = ""; // Clear input field
+                    resultText.innerHTML = ""; // Clear result message
+                }, 2000);
+            } else {
+                resultText.innerHTML = "❌ Nope, try again!";
+                resultText.style.color = "red";
+            }
+        }
+    </script>
 </body>
+
 </html>
